@@ -139,14 +139,16 @@
 
         if(board.play(x1,y1)){
 
-          var valid = true;
+          var valid = false;
 
-          for(var y2=0;y2<3;y2++){
-            for(var x2=0;x2<3;x2++){
+          for(var y2=0;y2<3 && !valid;y2++){
+            for(var x2=0;x2<3 && !valid;x2++){
 
               if(board.play(x2,y2)){
 
                 if(board.isCurrentWinner()){
+
+                  valid = true;
 
                   for(var i=0; i<points.length; i++){
                     if(points[i].x==x2 && points[i].y==y2){

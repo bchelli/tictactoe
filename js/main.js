@@ -58,9 +58,9 @@
         play(action.coords.x, action.coords.y);
         break;
 
-      case 'nope':
       default:
         break;
+
     }
     draw();
   }
@@ -73,14 +73,19 @@
    */
   function initBoard(){
 
+    // wait for a click
+    var humanPlays = function(){humanPlaying=true};
+    // auto-play
+    var AIPlays = ai.play(play);
+
     board.reset();
 
     gameType = $('#game-type').val();
     humanPlaying = false;
 
     var playerType = gameType.split('-');
-    play1   = playerType[0] == 'human' ? function(){humanPlaying=true} : ai.play(play);
-    play2   = playerType[1] == 'human' ? function(){humanPlaying=true} : ai.play(play);
+    play1   = playerType[0] == 'human' ? humanPlays : AIPlays;
+    play2   = playerType[1] == 'human' ? humanPlays : AIPlays;
     player1 = playerType[0] == 'human' ? 'Human' : 'AI';
     player2 = playerType[1] == 'human' ? 'Human' : 'AI';
 
@@ -123,13 +128,8 @@
 
   function play(x, y){
     if(board.play(x, y)){
-      board.switchPlayer();
       humanPlaying=false;
-      if(board.isPlayer1()){
-        play1();
-      } else {
-        play2();
-      }
+      board.switchPlayer(play1, play2);
       return true;
     }
     return false;

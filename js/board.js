@@ -32,7 +32,7 @@
     play:                 play,
     undo:                 undo,
 
-    isPlayer1:            isPlayer1,
+    // isPlayer1:            isPlayer1,
     // isPlayer2:            isPlayer2,
     // currentPlayer:        currentPlayer,
     // otherPlayer:          otherPlayer,
@@ -74,8 +74,13 @@
       _set(move.x, move.y, CELL_EMPTY);
     }
   }
-  function switchPlayer(){
+  function switchPlayer(cbPlayer1, cbPlayer2){
     _currentPlayer = otherPlayer();
+    if(isPlayer1()){
+      cbPlayer1 && cbPlayer1();
+    } else {
+      cbPlayer2 && cbPlayer2();
+    }
   }
   function play(x, y){
     if(isGameOver()) return false;
