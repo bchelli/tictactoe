@@ -69,7 +69,8 @@
         break;
 
       case 'play':
-        if(PLAYED_OK == play(action.cell, CELL_PLAYER1)){
+        var coords = getCoords(action.cell);
+        if(PLAYED_OK == play(coords, CELL_PLAYER1)){
           playAI();
         }
         break;
@@ -111,11 +112,9 @@
   }
 
 
-  function play(cell, player){
+  function play(coords, player){
 
     if(isGameOver()) return PLAYED_NOK_GAME_OVER;
-
-    var coords = getCoords(cell);
 
     if(board[coords.y][coords.x] == CELL_EMPTY){
       board[coords.y][coords.x] = player;
@@ -147,51 +146,157 @@
   }
 
 
-  function playAI(){
-    // dummy AI
-    var needToPlay = true;
-    $('#board .cell').each(function(index, el){
-      if(needToPlay && PLAYED_OK == play(el, CELL_PLAYER2)){
-        needToPlay = false;
-      }
-    });
-  }
-
-
   function isGameOver(){
     return winner!=CELL_EMPTY;
   }
 
 
-  function checkWinner(){
+  function getWinner(){
 
     for(var i=0;i<3;i++){
       // check lines
       if(board[i][0] != CELL_EMPTY && board[i][0] == board[i][1] && board[i][0] == board[i][2]){
-        winner = board[i][0];
-        return true;
+        return board[i][0];
       }
 
       // check cols
       if(board[0][i] != CELL_EMPTY && board[0][i] == board[1][i] && board[0][i] == board[2][i]){
-        winner = board[0][i];
-        return true;
+        return board[0][i];
       }
     }
 
     // check diag 1
     if(board[0][0] != CELL_EMPTY && board[0][0] == board[1][1] && board[0][0] == board[2][2]){
-      winner = board[0][0];
-      return true;
+      return board[0][0];
     }
     // check diag 2
     if(board[0][2] != CELL_EMPTY && board[0][2] == board[1][1] && board[0][2] == board[2][0]){
-      winner = board[0][2];
-      return true;
+      return board[0][2];
     }
 
+    return CELL_EMPTY;
+
+  }
+
+
+  function checkWinner(){
+    winner = getWinner();
+    return !isGameOver();
+  }
+
+
+  function getWinningMove(player){
+    for(var y=0;y<3;y++){
+      for(var x=0;x<3;x++){
+        if(board[y][x] == CELL_EMPTY){
+          board[y][x] = player;
+          var w = getWinner();
+          board[y][x] = CELL_EMPTY;
+          if(player == w) {
+            return {x:x,y:y};
+          }
+        }
+      }
+    }
     return false;
   }
+
+
+  function getForkMove(player){
+    for(var y1=0;y1<3;y1++){
+      for(var x1=0;x1<3;x1++){
+
+        if(board[y1][x1] == CELL_EMPTY){
+          board[y1][x1] = player;
+
+          var nbWins = 0;
+          for(var y2=0;y2<3;y2++){
+            for(var x2=0;x2<3;x2++){
+              if(board[y2][x2] == CELL_EMPTY){
+                board[y2][x2] = player;
+                if(player==getWinner()){
+                  nbWins++;
+                }
+                board[y2][x2] = CELL_EMPTY;
+              }
+            }
+          }
+
+          board[y1][x1] = CELL_EMPTY;
+          if(nbWins>1) {
+            return {x:x1,y:y1};
+          }
+        }
+
+      }
+    }
+    return false;
+  }
+
+
+
+
+
+  /*
+   * THE AI
+   */
+  function playAI(){
+
+    if(isGameOver()) return;
+
+    // implementing methods from: http://en.wikipedia.org/wiki/Tic-tac-toe#Strategy
+
+    // 1 - Win
+    var move = getWinningMove(CELL_PLAYER2);
+    if(move){
+      play(move, CELL_PLAYER2);
+      return;
+    }
+
+    // 2 - Block
+    var move = getWinningMove(CELL_PLAYER1);
+    if(move){
+      play(move, CELL_PLAYER2);
+      return;
+    }
+
+    // 3 - Fork
+    var move = getForkMove(CELL_PLAYER2);
+    if(move){
+      play(move, CELL_PLAYER2);
+      return;
+    }
+
+    // 4 - Blocking an opponent's fork
+    var move = getForkMove(CELL_PLAYER1);
+    if(move){
+      play(move, CELL_PLAYER2);
+      return;
+    }
+
+    // 5 - Center
+    if(board[1][1] == CELL_EMPTY) {play({x:1,y:1}, CELL_PLAYER2); return;}
+    
+    // 6 - Opposite corner
+    if(board[0][0] == CELL_EMPTY && board[2][2] == CELL_PLAYER1) {play({x:0,y:0}, CELL_PLAYER2); return;}
+    if(board[0][2] == CELL_EMPTY && board[2][0] == CELL_PLAYER1) {play({x:2,y:0}, CELL_PLAYER2); return;}
+    if(board[2][0] == CELL_EMPTY && board[0][2] == CELL_PLAYER1) {play({x:0,y:2}, CELL_PLAYER2); return;}
+    if(board[2][2] == CELL_EMPTY && board[0][0] == CELL_PLAYER1) {play({x:2,y:2}, CELL_PLAYER2); return;}
+    
+    // 7 - Empty corner
+    if(board[0][0] == CELL_EMPTY) {play({x:0,y:0}, CELL_PLAYER2); return;}
+    if(board[0][2] == CELL_EMPTY) {play({x:2,y:0}, CELL_PLAYER2); return;}
+    if(board[2][0] == CELL_EMPTY) {play({x:0,y:2}, CELL_PLAYER2); return;}
+    if(board[2][2] == CELL_EMPTY) {play({x:2,y:2}, CELL_PLAYER2); return;}
+    
+    // 8 - Empty side
+    if(board[0][1] == CELL_EMPTY) {play({x:1,y:0}, CELL_PLAYER2); return;}
+    if(board[1][0] == CELL_EMPTY) {play({x:0,y:1}, CELL_PLAYER2); return;}
+    if(board[2][1] == CELL_EMPTY) {play({x:1,y:2}, CELL_PLAYER2); return;}
+    if(board[1][2] == CELL_EMPTY) {play({x:2,y:1}, CELL_PLAYER2); return;}
+
+  }
+
 
 
 })();
