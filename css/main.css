@@ -1,5 +1,5 @@
 
-h1{
+body{
   text-align: center;
 }
 
@@ -38,30 +38,31 @@ h1{
     /*
      * CROSS
      */
-    #board .cell.cross:after, #board .cell.cross:before{
+    #board .cell[cell-type=cross]:after, #board .cell[cell-type=cross]:before{
       -webkit-transform: rotate(45deg);
           -ms-transform: rotate(45deg);
               transform: rotate(45deg);
     }
-    #board .cell.cross:before {
+    #board .cell[cell-type=cross]:before {
       left: 50%;
       width: 30%;
       margin-left: -15%;
       height: 100%;
       
     }
-    #board .cell.cross:after {
+    #board .cell[cell-type=cross]:after {
       top: 50%;
       height: 30%;
       margin-top: -15%;
       width: 100%;
+      left: 0;
     }
 
 
     /*
      * CIRCLE
      */
-    #board .cell.circle:before{
+    #board .cell[cell-type=circle]:before{
       border-radius: 100%;
       background: #d00;
       width: 90%;
@@ -69,7 +70,7 @@ h1{
       top: 5%;
       left: 5%;
     }
-    #board .cell.circle:after{
+    #board .cell[cell-type=circle]:after{
       border-radius: 100%;
       background: #fff;
       width: 40%;
