@@ -7,7 +7,7 @@
    * VARIABLES
    */
   var gameType,
-      humanPlaying,
+      allowHumanClick,
       player1,
       player2,
       play1,
@@ -28,7 +28,7 @@
    * EVENTS
    */
   $('#board').on('click', '.cell', function(ev){
-    if(humanPlaying){
+    if(allowHumanClick){
       actionLoop({
         kind:'play',
         coords:getCoords(ev.target)
@@ -71,17 +71,23 @@
   /*
    * HELPERS
    */
+  // wait for a click
+  function humanPlays(){};
+  // auto-play
+  function AIPlays(){
+    allowHumanClick=false;
+    ai.play(function(x,y){
+      var r = play(x,y);
+      allowHumanClick=true;
+      return r;
+    })();
+  };
   function initBoard(){
-
-    // wait for a click
-    var humanPlays = function(){humanPlaying=true};
-    // auto-play
-    var AIPlays = ai.play(play);
 
     board.reset();
 
     gameType = $('#game-type').val();
-    humanPlaying = false;
+    allowHumanClick = true;
 
     var playerType = gameType.split('-');
     play1   = playerType[0] == 'human' ? humanPlays : AIPlays;
@@ -128,7 +134,6 @@
 
   function play(x, y){
     if(board.play(x, y)){
-      humanPlaying=false;
       board.switchPlayer(play1, play2);
       return true;
     }
