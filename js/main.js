@@ -11,7 +11,8 @@
       player1,
       player2,
       play1,
-      play2;
+      play2,
+      activePlayer;
 
 
 
@@ -72,9 +73,14 @@
    * HELPERS
    */
   // wait for a click
-  function humanPlays(){};
+  function humanPlays(player){
+    return function(){
+      activePlayer = player;
+    }
+  };
   // auto-play
   function AIPlays(){
+    activePlayer = '';
     allowHumanClick=false;
     ai.play(function(x,y){
       var r = play(x,y);
@@ -88,10 +94,11 @@
 
     gameType = $('#game-type').val();
     allowHumanClick = true;
+    activePlayer = '';
 
     var playerType = gameType.split('-');
-    play1   = playerType[0] == 'human' ? humanPlays : AIPlays;
-    play2   = playerType[1] == 'human' ? humanPlays : AIPlays;
+    play1   = playerType[0] == 'human' ? humanPlays('player1') : AIPlays;
+    play2   = playerType[1] == 'human' ? humanPlays('player2') : AIPlays;
     player1 = playerType[0] == 'human' ? 'Human' : 'AI';
     player2 = playerType[1] == 'human' ? 'Human' : 'AI';
 
@@ -125,8 +132,13 @@
     // the winner
     $('#player1 .status').empty();
     $('#player2 .status').empty();
+    $('#player1,#player2').removeClass('active').removeClass('winner');
+    $('#board').attr('winning-line', '');
     if(board.isGameOver()){
-      $('#player'+(board.isWinner1() ? 1 : 2)+' .status').html('won');
+      $('#board').attr('winning-line', board.getWinner()[1]);
+      $('#player'+(board.isWinner1() ? 1 : 2)).addClass('winner').find('.status').html('won');
+    } else if(activePlayer){
+      $('#'+activePlayer).addClass('active').find('.status').html('thinking...');
     }
 
   }

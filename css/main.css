@@ -12,11 +12,79 @@ h1{
   width: 300px;
   margin: 30px auto;
 }
+
+.player.active,
+.player.winner{
+  font-weight: 900;
+}
+
+#player1.winner{
+  color: #81E2EF;
+}
+#player2.winner{
+  color: #FD91CA;
+}
+
 #board{
   height: 300px;
   margin: 30px auto;
   clear: both;
+  position:relative;
 }
+
+  #board:after{
+    content: "";
+    position: absolute;
+    z-index: -2;
+    background: #EEFFEB;
+    border-radius: 100px;
+  }
+  #board[winning-line=col-0]:after,
+  #board[winning-line=col-1]:after,
+  #board[winning-line=col-2]:after{
+    left: 6%;
+    top: 4%;
+    height: 91%;
+    width: 20%;
+  }
+  #board[winning-line=col-1]:after{
+    left: 38%;
+  }
+  #board[winning-line=col-2]:after{
+    left: 72%;
+  }
+  #board[winning-line=row-0]:after,
+  #board[winning-line=row-1]:after,
+  #board[winning-line=row-2]:after{
+    left: 4%;
+    top: 6%;
+    width: 91%;
+    height: 20%;
+  }
+  #board[winning-line=row-1]:after{
+    top: 39%;
+  }
+  #board[winning-line=row-2]:after{
+    top: 72%;
+  }
+  #board[winning-line=diag-1]:after,
+  #board[winning-line=diag-2]:after{
+    left: 48%;
+    margin-left: -9%;
+    top: -9%;
+    height: 117%;
+    width: 20%;
+    -webkit-transform: rotate(-45deg);
+        -ms-transform: rotate(-45deg);
+            transform: rotate(-45deg);
+  }
+  #board[winning-line=diag-2]:after{
+    -webkit-transform: rotate(45deg);
+        -ms-transform: rotate(45deg);
+            transform: rotate(45deg);
+    top:-10%;
+  }
+
 
   #board ul{
     padding:0;
@@ -30,7 +98,7 @@ h1{
   #board .cell:nth-child(5),
   #board .cell:nth-child(7),
   #board .cell:nth-child(8){
-    border-right: 2px solid #eee;
+    border-right: 3px solid #ddd;
   }
 
   #board .cell:nth-child(1),
@@ -39,7 +107,7 @@ h1{
   #board .cell:nth-child(4),
   #board .cell:nth-child(5),
   #board .cell:nth-child(6){
-    border-bottom: 2px solid #eee;
+    border-bottom: 3px solid #ddd;
   }
 
 .cell-label{

@@ -44,7 +44,7 @@
     isCellOtherPlayer:    isCellOtherPlayer,
 
     isGameOver:           isGameOver,
-    // getWinner:            getWinner,
+    getWinner:            getWinner,
     isWinner1:            isWinner1,
     // isWinner2:            isWinner2,
     // isOtherWinner:        isOtherWinner,
@@ -95,25 +95,25 @@
     for(var i=0;i<3;i++){
       // check lines
       if(_board[i][0] != CELL_EMPTY && _board[i][0] == _board[i][1] && _board[i][0] == _board[i][2]){
-        return _board[i][0];
+        return [_board[i][0], 'row-'+i];
       }
       // check cols
       if(_board[0][i] != CELL_EMPTY && _board[0][i] == _board[1][i] && _board[0][i] == _board[2][i]){
-        return _board[0][i];
+        return [_board[0][i], 'col-'+i];
       }
     }
     // check diag 1
     if(_board[0][0] != CELL_EMPTY && _board[0][0] == _board[1][1] && _board[0][0] == _board[2][2]){
-      return _board[0][0];
+      return [_board[0][0], 'diag-1'];
     }
     // check diag 2
     if(_board[0][2] != CELL_EMPTY && _board[0][2] == _board[1][1] && _board[0][2] == _board[2][0]){
-      return _board[0][2];
+      return [_board[0][2], 'diag-2'];
     }
-    return CELL_EMPTY;
+    return [CELL_EMPTY, ''];
   }
   function isGameOver(){
-    return getWinner() !== CELL_EMPTY;
+    return getWinner()[0] !== CELL_EMPTY;
   }
   function isPlayer1(){
     return currentPlayer() === CELL_PLAYER1;
@@ -128,16 +128,16 @@
     return _currentPlayer;
   }
   function isWinner1(){
-    return getWinner() === CELL_PLAYER1;
+    return getWinner()[0] === CELL_PLAYER1;
   }
   // function isWinner2(){
-  //   return getWinner() === CELL_PLAYER2;
+  //   return getWinner()[0] === CELL_PLAYER2;
   // }
   // function isOtherWinner(){
-  //   return getWinner() === otherPlayer();
+  //   return getWinner()[0] === otherPlayer();
   // }
   function isCurrentWinner(){
-    return getWinner() === currentPlayer();
+    return getWinner()[0] === currentPlayer();
   }
 
 
