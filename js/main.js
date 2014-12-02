@@ -1,33 +1,14 @@
 
-
 ;(function(){
 
   "use strict";
 
   /*
-   * CONSTANTS
-   */
-  var CELL_EMPTY    = 0;
-  var CELL_PLAYER1  = 1;
-  var CELL_PLAYER2  = 2;
-
-  var PLAYED_OK                 = 3;
-  var PLAYED_NOK_GAME_OVER      = 4;
-  var PLAYED_NOK_CELL_NOT_EMPTY = 5;
-
-  var CELL_MAPPING = {};
-  CELL_MAPPING[CELL_EMPTY]   = '';
-  CELL_MAPPING[CELL_PLAYER1] = 'cross';
-  CELL_MAPPING[CELL_PLAYER2] = 'circle';
-
-
-
-
-  /*
    * VARIABLES
    */
-  var board;
-  var winner;
+  var gameType,
+      player1,
+      player2;
 
 
 
@@ -70,7 +51,7 @@
 
       case 'play':
         var coords = getCoords(action.cell);
-        if(PLAYED_OK == play(coords, CELL_PLAYER1)){
+        if(play(coords.x, coords.y) && gameType != 'human-human'){
           playAI();
         }
         break;
@@ -88,17 +69,26 @@
   /*
    * HELPERS
    */
-
-
   function initBoard(){
-    board = [
-      [CELL_EMPTY, CELL_EMPTY, CELL_EMPTY],
-      [CELL_EMPTY, CELL_EMPTY, CELL_EMPTY],
-      [CELL_EMPTY, CELL_EMPTY, CELL_EMPTY]
-    ];
-    winner = CELL_EMPTY;
-    if($('#player-starting').val()=='ai'){
-      playAI();
+
+    board.reset();
+
+    gameType = $('#game-type').val();
+
+    switch(gameType){
+      case 'human-human':
+        player1 = 'Human 1';
+        player2 = 'Human 2';
+        break;
+      case 'human-ai':
+        player1 = 'Human';
+        player2 = 'AI';
+        break;
+      case 'ai-human':
+        player1 = 'AI';
+        player2 = 'Human';
+        playAI();
+        break;
     }
   }
 
@@ -112,127 +102,36 @@
   }
 
 
-  function play(coords, player){
-
-    if(isGameOver()) return PLAYED_NOK_GAME_OVER;
-
-    if(board[coords.y][coords.x] == CELL_EMPTY){
-      board[coords.y][coords.x] = player;
-      checkWinner();
-      return PLAYED_OK;
-    }
-
-    return PLAYED_NOK_CELL_NOT_EMPTY;
-  }
-
-
   function draw(){
 
     // the board
     $('#board .cell').each(function(index, el){
       var $el = $(el);
       var coords = getCoords($el);
-
-      $el.attr('cell-type',CELL_MAPPING[board[coords.y][coords.x]]);
+      $el.attr('cell-type', (board.isPlayer1(coords.x, coords.y) ? 'cross' : (board.isPlayer2(coords.x, coords.y) ? 'circle' : '')));
     });
 
+    // the names
+    $('#player1 .name').html(player1);
+    $('#player2 .name').html(player2);
+
     // the winner
-    if(isGameOver()){
-      $('#winner').removeClass('hidden').find('.cell').attr('cell-type', CELL_MAPPING[winner]);
-    } else {
-      $('#winner').addClass('hidden');
+    $('#player1 .status').empty();
+    $('#player2 .status').empty();
+    if(board.isGameOver()){
+      $('#player'+(board.isWinner1() ? 1 : 2)+' .status').html('won');
     }
 
   }
 
 
-  function isGameOver(){
-    return winner!=CELL_EMPTY;
-  }
-
-
-  function getWinner(){
-
-    for(var i=0;i<3;i++){
-      // check lines
-      if(board[i][0] != CELL_EMPTY && board[i][0] == board[i][1] && board[i][0] == board[i][2]){
-        return board[i][0];
-      }
-
-      // check cols
-      if(board[0][i] != CELL_EMPTY && board[0][i] == board[1][i] && board[0][i] == board[2][i]){
-        return board[0][i];
-      }
-    }
-
-    // check diag 1
-    if(board[0][0] != CELL_EMPTY && board[0][0] == board[1][1] && board[0][0] == board[2][2]){
-      return board[0][0];
-    }
-    // check diag 2
-    if(board[0][2] != CELL_EMPTY && board[0][2] == board[1][1] && board[0][2] == board[2][0]){
-      return board[0][2];
-    }
-
-    return CELL_EMPTY;
-
-  }
-
-
-  function checkWinner(){
-    winner = getWinner();
-    return !isGameOver();
-  }
-
-
-  function getWinningMove(player){
-    for(var y=0;y<3;y++){
-      for(var x=0;x<3;x++){
-        if(board[y][x] == CELL_EMPTY){
-          board[y][x] = player;
-          var w = getWinner();
-          board[y][x] = CELL_EMPTY;
-          if(player == w) {
-            return {x:x,y:y};
-          }
-        }
-      }
+  function play(x, y){
+    if(board.play(x, y)){
+      board.switchPlayer();
+      return true;
     }
     return false;
   }
-
-
-  function getForkMove(player){
-    for(var y1=0;y1<3;y1++){
-      for(var x1=0;x1<3;x1++){
-
-        if(board[y1][x1] == CELL_EMPTY){
-          board[y1][x1] = player;
-
-          var nbWins = 0;
-          for(var y2=0;y2<3;y2++){
-            for(var x2=0;x2<3;x2++){
-              if(board[y2][x2] == CELL_EMPTY){
-                board[y2][x2] = player;
-                if(player==getWinner()){
-                  nbWins++;
-                }
-                board[y2][x2] = CELL_EMPTY;
-              }
-            }
-          }
-
-          board[y1][x1] = CELL_EMPTY;
-          if(nbWins>1) {
-            return {x:x1,y:y1};
-          }
-        }
-
-      }
-    }
-    return false;
-  }
-
 
 
 
@@ -242,62 +141,114 @@
    */
   function playAI(){
 
-    if(isGameOver()) return;
+    if(board.isGameOver()) return;
 
     // implementing methods from: http://en.wikipedia.org/wiki/Tic-tac-toe#Strategy
 
     // 1 - Win
-    var move = getWinningMove(CELL_PLAYER2);
+    var move = getWinningMove();
     if(move){
-      play(move, CELL_PLAYER2);
+      play(move.x, move.y);
       return;
     }
 
     // 2 - Block
-    var move = getWinningMove(CELL_PLAYER1);
+    board.switchPlayer();
+    var move = getWinningMove();
+    board.switchPlayer();
     if(move){
-      play(move, CELL_PLAYER2);
+      play(move.x, move.y);
       return;
     }
 
     // 3 - Fork
-    var move = getForkMove(CELL_PLAYER2);
+    var move = getForkMove();
     if(move){
-      play(move, CELL_PLAYER2);
+      play(move.x, move.y);
       return;
     }
 
     // 4 - Blocking an opponent's fork
-    var move = getForkMove(CELL_PLAYER1);
+    board.switchPlayer();
+    var move = getForkMove();
+    board.switchPlayer();
     if(move){
-      play(move, CELL_PLAYER2);
+      play(move.x, move.y);
       return;
     }
 
     // 5 - Center
-    if(board[1][1] == CELL_EMPTY) {play({x:1,y:1}, CELL_PLAYER2); return;}
+    if(board.isEmpty(1, 1)) {play(1, 1); return;}
     
     // 6 - Opposite corner
-    if(board[0][0] == CELL_EMPTY && board[2][2] == CELL_PLAYER1) {play({x:0,y:0}, CELL_PLAYER2); return;}
-    if(board[0][2] == CELL_EMPTY && board[2][0] == CELL_PLAYER1) {play({x:2,y:0}, CELL_PLAYER2); return;}
-    if(board[2][0] == CELL_EMPTY && board[0][2] == CELL_PLAYER1) {play({x:0,y:2}, CELL_PLAYER2); return;}
-    if(board[2][2] == CELL_EMPTY && board[0][0] == CELL_PLAYER1) {play({x:2,y:2}, CELL_PLAYER2); return;}
+    if(board.isEmpty(0, 0) && board.isOtherPlayer(2, 2)) {play(0, 0); return;}
+    if(board.isEmpty(0, 2) && board.isOtherPlayer(2, 0)) {play(0, 2); return;}
+    if(board.isEmpty(2, 0) && board.isOtherPlayer(0, 2)) {play(2, 0); return;}
+    if(board.isEmpty(2, 2) && board.isOtherPlayer(0, 0)) {play(2, 2); return;}
     
     // 7 - Empty corner
-    if(board[0][0] == CELL_EMPTY) {play({x:0,y:0}, CELL_PLAYER2); return;}
-    if(board[0][2] == CELL_EMPTY) {play({x:2,y:0}, CELL_PLAYER2); return;}
-    if(board[2][0] == CELL_EMPTY) {play({x:0,y:2}, CELL_PLAYER2); return;}
-    if(board[2][2] == CELL_EMPTY) {play({x:2,y:2}, CELL_PLAYER2); return;}
+    if(board.isEmpty(0, 0)) {play(0, 0); return;}
+    if(board.isEmpty(0, 2)) {play(0, 2); return;}
+    if(board.isEmpty(2, 0)) {play(2, 0); return;}
+    if(board.isEmpty(2, 2)) {play(2, 2); return;}
     
     // 8 - Empty side
-    if(board[0][1] == CELL_EMPTY) {play({x:1,y:0}, CELL_PLAYER2); return;}
-    if(board[1][0] == CELL_EMPTY) {play({x:0,y:1}, CELL_PLAYER2); return;}
-    if(board[2][1] == CELL_EMPTY) {play({x:1,y:2}, CELL_PLAYER2); return;}
-    if(board[1][2] == CELL_EMPTY) {play({x:2,y:1}, CELL_PLAYER2); return;}
+    if(board.isEmpty(1, 0)) {play(1, 0); return;}
+    if(board.isEmpty(0, 1)) {play(0, 1); return;}
+    if(board.isEmpty(1, 2)) {play(1, 2); return;}
+    if(board.isEmpty(2, 1)) {play(2, 1); return;}
 
   }
 
 
+  function getWinningMove(){
+    for(var y=0;y<3;y++){
+      for(var x=0;x<3;x++){
+        if(board.play(x, y)){
+          var w = board.isCurrentWinner();
+          board.undo();
+          if(w) {
+            return {x:x,y:y};
+          }
+        }
+      }
+    }
+    return false;
+  }
+
+
+  function getForkMove(){
+    for(var y1=0;y1<3;y1++){
+      for(var x1=0;x1<3;x1++){
+
+        if(board.play(x1,y1)){
+
+          var nbWins = 0;
+          for(var y2=0;y2<3;y2++){
+            for(var x2=0;x2<3;x2++){
+
+              if(board.play(x2,y2)){
+
+                if(board.isCurrentWinner()){
+                  nbWins++;
+                }
+                board.undo();
+
+              }
+            }
+          }
+
+          board.undo();
+          if(nbWins>1) {
+            return {x:x1,y:y1};
+          }
+            
+        }
+
+      }
+    }
+    return false;
+  }
 
 })();
 

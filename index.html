@@ -16,25 +16,24 @@
     <h1>An Handy Tic Tac Toe</h1>
 
     <!-- New game -->
-    <select id="player-starting">
-      <option value="human">You start</option>
-      <option value="ai">AI starts</option>
+    <select id="game-type">
+      <option value="human-human">Human vs Human</option>
+      <option value="human-ai">Human vs AI</option>
+      <option value="ai-human">AI vs Human</option>
     </select>
     <button id="new-game">New Game</button>
 
+    <!-- The board info -->
     <div id="board-info">
-      <!-- The winner is.... -->
-      <div>
-        <div class="cell small" cell-type="circle"></div>
-        <div class="cell-label">AI</div>
-        <div class="cell small" cell-type="cross"></div>
-        <div class="cell-label">You</div>
+      <div class="cell small" cell-type="cross"></div>
+      <div class="cell-label" id="player1">
+        <span class="name"></span>
+        <span class="status"></span>
       </div>
-
-      <!-- The winner is.... -->
-      <div id="winner" class="hidden">
-        <div class="cell small" cell-type=""></div>
-        <div class="cell-label">is the winner</div>
+      <div class="cell small" cell-type="circle"></div>
+      <div class="cell-label" id="player2">
+        <span class="name"></span>
+        <span class="status"></span>
       </div>
     </div>
 
@@ -57,6 +56,7 @@
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
     <!-- jQuery fallback for rawgit.com -->
     <script>window.jQuery || document.write('<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"><\/script>')</script>
+    <script src="js/board.js"></script>
     <script src="js/main.js"></script>
 
   </body>

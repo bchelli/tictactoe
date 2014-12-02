@@ -4,16 +4,10 @@ body{
   font-family: arial;
 }
 
-#winner{
-  margin-top: 15px;
-}
-#winner.hidden{
-  visibility:hidden;
-}
-
 #board, #board-info{
   width: 300px;
   margin: 30px auto;
+  clear: both;
 }
 #board{
   height: 300px;
@@ -52,7 +46,7 @@ body{
     content: "";
     position: absolute;
     z-index: -1;
-    background: #d00;
+    background: #700;
   }
 
 
