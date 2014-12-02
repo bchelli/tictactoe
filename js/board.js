@@ -25,28 +25,30 @@
    * Module exported (Singleton)
    */
   module.board = {
-    reset:            reset,
+    reset:                reset,
 
-    switchPlayer:     switchPlayer,
+    switchPlayer:         switchPlayer,
 
-    play:             play,
-    undo:             undo,
+    play:                 play,
+    undo:                 undo,
 
-    currentPlayer:    currentPlayer,
-    otherPlayer:      otherPlayer,
+    isPlayer1:            isPlayer1,
+    // isPlayer2:            isPlayer2,
+    // currentPlayer:        currentPlayer,
+    // otherPlayer:          otherPlayer,
 
-    isEmpty:          isEmpty,
-    isPlayer1:        isPlayer1,
-    isPlayer2:        isPlayer2,
-    isCurrentPlayer:  isCurrentPlayer,
-    isOtherPlayer:    isOtherPlayer,
+    // isCellEmpty:          isCellEmpty,
+    isCellPlayer1:        isCellPlayer1,
+    isCellPlayer2:        isCellPlayer2,
+    // isCellCurrentPlayer:  isCellCurrentPlayer,
+    isCellOtherPlayer:    isCellOtherPlayer,
 
-    isGameOver:       isGameOver,
-    getWinner:        getWinner,
-    isWinner1:        isWinner1,
-    isWinner2:        isWinner2,
-    isCurrentWinner:  isCurrentWinner,
-    isOtherWinner:    isOtherWinner
+    isGameOver:           isGameOver,
+    // getWinner:            getWinner,
+    isWinner1:            isWinner1,
+    // isWinner2:            isWinner2,
+    // isOtherWinner:        isOtherWinner,
+    isCurrentWinner:      isCurrentWinner
   };
 
 
@@ -69,7 +71,7 @@
   function undo(){
     if(_stack.length>0){
       var move = _stack.pop();
-      set(move.x, move.y, CELL_EMPTY);
+      _set(move.x, move.y, CELL_EMPTY);
     }
   }
   function switchPlayer(){
@@ -77,9 +79,9 @@
   }
   function play(x, y){
     if(isGameOver()) return false;
-    if(isEmpty(x, y)){
-      set(x, y, _currentPlayer);
-      _stack.push({x:x,y:y,player:_currentPlayer});
+    if(isCellEmpty(x, y)){
+      _set(x, y, currentPlayer());
+      _stack.push({x:x,y:y,player:currentPlayer()});
       return true;
     }
     return false;
@@ -108,8 +110,14 @@
   function isGameOver(){
     return getWinner() !== CELL_EMPTY;
   }
+  function isPlayer1(){
+    return currentPlayer() === CELL_PLAYER1;
+  }
+  // function isPlayer2(){
+  //   return _currentPlayer === CELL_PLAYER1;
+  // }
   function otherPlayer(){
-    return _currentPlayer === CELL_PLAYER1 ? CELL_PLAYER2 : CELL_PLAYER1;
+    return isPlayer1() ? CELL_PLAYER2 : CELL_PLAYER1;
   }
   function currentPlayer(){
     return _currentPlayer;
@@ -117,14 +125,14 @@
   function isWinner1(){
     return getWinner() === CELL_PLAYER1;
   }
-  function isWinner2(){
-    return getWinner() === CELL_PLAYER2;
-  }
-  function isOtherWinner(){
-    return otherPlayer() === getWinner();
-  }
+  // function isWinner2(){
+  //   return getWinner() === CELL_PLAYER2;
+  // }
+  // function isOtherWinner(){
+  //   return getWinner() === otherPlayer();
+  // }
   function isCurrentWinner(){
-    return currentPlayer() === getWinner();
+    return getWinner() === currentPlayer();
   }
 
 
@@ -132,26 +140,26 @@
   /*
    * Board Accessor
    */
-  function set(x, y, player){
+  function _set(x, y, player){
     _board[y][x] = player;
   }
-  function get(x, y){
+  function _get(x, y){
     return _board[y][x];
   }
-  function isEmpty(x, y){
-    return get(x, y) == CELL_EMPTY;
+  function isCellEmpty(x, y){
+    return _get(x, y) == CELL_EMPTY;
   }
-  function isPlayer1(x, y){
-    return get(x, y) == CELL_PLAYER1;
+  function isCellPlayer1(x, y){
+    return _get(x, y) == CELL_PLAYER1;
   }
-  function isPlayer2(x, y){
-    return get(x, y) == CELL_PLAYER2;
+  function isCellPlayer2(x, y){
+    return _get(x, y) == CELL_PLAYER2;
   }
-  function isCurrentPlayer(x, y){
-    return get(x, y) == _currentPlayer;
-  }
-  function isOtherPlayer(x, y){
-    return get(x, y) == otherPlayer();
+  // function isCellCurrentPlayer(x, y){
+  //   return _get(x, y) == currentPlayer();
+  // }
+  function isCellOtherPlayer(x, y){
+    return _get(x, y) == otherPlayer();
   }
 
 })(window);

@@ -104,7 +104,7 @@
     $('#board .cell').each(function(index, el){
       var $el = $(el);
       var coords = getCoords($el);
-      $el.attr('cell-type', (board.isPlayer1(coords.x, coords.y) ? 'cross' : (board.isPlayer2(coords.x, coords.y) ? 'circle' : '')));
+      $el.attr('cell-type', (board.isCellPlayer1(coords.x, coords.y) ? 'cross' : (board.isCellPlayer2(coords.x, coords.y) ? 'circle' : '')));
     });
 
     // the names
@@ -125,7 +125,7 @@
     if(board.play(x, y)){
       board.switchPlayer();
       humanPlaying=false;
-      if(board.currentPlayer()==1){
+      if(board.isPlayer1()){
         play1();
       } else {
         play2();

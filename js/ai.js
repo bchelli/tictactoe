@@ -49,31 +49,32 @@
       move = getForkMove();
       board.switchPlayer();
       if(move){
+        // option 1
         move = createAThreat(move);
         play(move.x, move.y);
         return;
       }
 
       // 5 - Center
-      if(board.isEmpty(1, 1)) {play(1, 1); return;}
+      if(play(1, 1)) {return;}
       
       // 6 - Opposite corner
-      if(board.isEmpty(0, 0) && board.isOtherPlayer(2, 2)) {play(0, 0); return;}
-      if(board.isEmpty(0, 2) && board.isOtherPlayer(2, 0)) {play(0, 2); return;}
-      if(board.isEmpty(2, 0) && board.isOtherPlayer(0, 2)) {play(2, 0); return;}
-      if(board.isEmpty(2, 2) && board.isOtherPlayer(0, 0)) {play(2, 2); return;}
+      if(board.isCellOtherPlayer(2, 2) && play(0, 0)) {return;}
+      if(board.isCellOtherPlayer(2, 0) && play(0, 2)) {return;}
+      if(board.isCellOtherPlayer(0, 2) && play(2, 0)) {return;}
+      if(board.isCellOtherPlayer(0, 0) && play(2, 2)) {return;}
       
       // 7 - Empty corner
-      if(board.isEmpty(0, 0)) {play(0, 0); return;}
-      if(board.isEmpty(0, 2)) {play(0, 2); return;}
-      if(board.isEmpty(2, 0)) {play(2, 0); return;}
-      if(board.isEmpty(2, 2)) {play(2, 2); return;}
+      if(play(0, 0)) {return;}
+      if(play(0, 2)) {return;}
+      if(play(2, 0)) {return;}
+      if(play(2, 2)) {return;}
       
       // 8 - Empty side
-      if(board.isEmpty(1, 0)) {play(1, 0); return;}
-      if(board.isEmpty(0, 1)) {play(0, 1); return;}
-      if(board.isEmpty(1, 2)) {play(1, 2); return;}
-      if(board.isEmpty(2, 1)) {play(2, 1); return;}
+      if(play(1, 0)) {return;}
+      if(play(0, 1)) {return;}
+      if(play(1, 2)) {return;}
+      if(play(2, 1)) {return;}
 
     }
 

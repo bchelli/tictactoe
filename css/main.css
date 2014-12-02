@@ -4,6 +4,10 @@ body{
   font-family: 'Lato', sans-serif;
 }
 
+h1{
+  font-weight: normal;
+}
+
 #board, #board-info{
   width: 300px;
   margin: 30px auto;
@@ -11,7 +15,6 @@ body{
 }
 #board{
   height: 300px;
-  border: 1px solid #ccc;
 }
 
   #board ul{
@@ -20,10 +23,28 @@ body{
     list-style: none;
   }
 
+  #board .cell:nth-child(1),
+  #board .cell:nth-child(2),
+  #board .cell:nth-child(4),
+  #board .cell:nth-child(5),
+  #board .cell:nth-child(7),
+  #board .cell:nth-child(8){
+    border-right: 3px solid #ccc;
+  }
+
+  #board .cell:nth-child(1),
+  #board .cell:nth-child(2),
+  #board .cell:nth-child(3),
+  #board .cell:nth-child(4),
+  #board .cell:nth-child(5),
+  #board .cell:nth-child(6){
+    border-bottom: 3px solid #ccc;
+  }
+
 .cell-label{
   text-align:left;
   padding-left:50px;
-  line-height:40px;
+  line-height:42px;
 }
 
 .cell{
@@ -32,14 +53,12 @@ body{
   float: left;
   width: 98px;
   height: 98px;
-  border: 1px solid #ccc;
   position: relative;
 }
 
 .cell.small{
-  width: 40px;
-  height: 40px;
-  border: none;
+  width: 41px;
+  height: 42px;
 }
 
   .cell:before, .cell:after{
@@ -58,6 +77,7 @@ body{
     -webkit-transform: rotate(45deg);
         -ms-transform: rotate(45deg);
             transform: rotate(45deg);
+    border-radius: 100px;
   }
   .cell[cell-type=cross]:before {
     left: 50%;
