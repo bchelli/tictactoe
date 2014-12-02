@@ -16,7 +16,16 @@
     <h1>An Handy Tic Tac Toe</h1>
 
     <!-- New game -->
+    <select id="player-starting">
+      <option value="human">You start</option>
+      <option value="ai">AI starts</option>
+    </select>
     <button id="new-game">New Game</button>
+
+    <!-- The winner is.... -->
+    <div id="winner" class="hidden">
+      <div class="cell small" cell-type=""></div> is the winner
+    </div>
 
     <!-- The board -->
     <div id="board">

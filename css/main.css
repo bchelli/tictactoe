@@ -1,6 +1,11 @@
 
 body{
   text-align: center;
+  font-family: arial;
+}
+
+#winner.hidden{
+  visibility:hidden;
 }
 
 #board{
@@ -16,65 +21,73 @@ body{
     list-style: none;
   }
 
-    #board .cell{
-      padding:0;
-      margin:0;
-      float: left;
-      width: 98px;
-      height: 98px;
-      border: 1px solid #ccc;
-      position: relative;
-    }
+.cell{
+  padding:0;
+  margin:0;
+  float: left;
+  width: 98px;
+  height: 98px;
+  border: 1px solid #ccc;
+  position: relative;
+}
 
-    #board .cell:before, #board .cell:after{
-      content: "";
-      position: absolute;
-      z-index: -1;
-      background: #d00;
-    }
+.cell.small{
+  width: 20px;
+  height: 20px;
+  border: none;
+  float:none;
+  margin: 20px auto 10px;
+}
 
-
-
-    /*
-     * CROSS
-     */
-    #board .cell[cell-type=cross]:after, #board .cell[cell-type=cross]:before{
-      -webkit-transform: rotate(45deg);
-          -ms-transform: rotate(45deg);
-              transform: rotate(45deg);
-    }
-    #board .cell[cell-type=cross]:before {
-      left: 50%;
-      width: 30%;
-      margin-left: -15%;
-      height: 100%;
-      
-    }
-    #board .cell[cell-type=cross]:after {
-      top: 50%;
-      height: 30%;
-      margin-top: -15%;
-      width: 100%;
-      left: 0;
-    }
+  .cell:before, .cell:after{
+    content: "";
+    position: absolute;
+    z-index: -1;
+    background: #d00;
+  }
 
 
-    /*
-     * CIRCLE
-     */
-    #board .cell[cell-type=circle]:before{
-      border-radius: 100%;
-      background: #d00;
-      width: 90%;
-      height: 90%;
-      top: 5%;
-      left: 5%;
-    }
-    #board .cell[cell-type=circle]:after{
-      border-radius: 100%;
-      background: #fff;
-      width: 40%;
-      height: 40%;
-      top: 30%;
-      left: 30%;
-    }
+
+  /*
+   * CROSS
+   */
+  .cell[cell-type=cross]:after, .cell[cell-type=cross]:before{
+    -webkit-transform: rotate(45deg);
+        -ms-transform: rotate(45deg);
+            transform: rotate(45deg);
+  }
+  .cell[cell-type=cross]:before {
+    left: 50%;
+    width: 30%;
+    margin-left: -15%;
+    height: 100%;
+    
+  }
+  .cell[cell-type=cross]:after {
+    top: 50%;
+    height: 30%;
+    margin-top: -15%;
+    width: 100%;
+    left: 0;
+  }
+
+
+  /*
+   * CIRCLE
+   */
+  .cell[cell-type=circle]:before{
+    border-radius: 100%;
+    background: #d00;
+    width: 90%;
+    height: 90%;
+    top: 5%;
+    left: 5%;
+  }
+  .cell[cell-type=circle]:after{
+    border-radius: 100%;
+    background: #fff;
+    width: 40%;
+    height: 40%;
+    top: 30%;
+    left: 30%;
+  }
