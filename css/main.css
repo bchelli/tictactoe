@@ -1,7 +1,7 @@
 
 body{
   text-align: center;
-  font-family: arial;
+  font-family: 'Lato', sans-serif;
 }
 
 #board, #board-info{
@@ -22,8 +22,8 @@ body{
 
 .cell-label{
   text-align:left;
-  padding-left:30px;
-  line-height:20px;
+  padding-left:50px;
+  line-height:40px;
 }
 
 .cell{
@@ -37,8 +37,8 @@ body{
 }
 
 .cell.small{
-  width: 20px;
-  height: 20px;
+  width: 40px;
+  height: 40px;
   border: none;
 }
 
@@ -46,7 +46,7 @@ body{
     content: "";
     position: absolute;
     z-index: -1;
-    background: #0d0;
+    background: #81E2EF;
   }
 
 
@@ -61,17 +61,17 @@ body{
   }
   .cell[cell-type=cross]:before {
     left: 50%;
-    width: 30%;
-    margin-left: -15%;
-    height: 100%;
-    
+    width: 12%;
+    margin-left: -6%;
+    height: 50%;
+    top:25%;
   }
   .cell[cell-type=cross]:after {
     top: 50%;
-    height: 30%;
-    margin-top: -15%;
-    width: 100%;
-    left: 0;
+    height: 12%;
+    margin-top: -6%;
+    width: 50%;
+    left:25%;
   }
 
 
@@ -80,17 +80,17 @@ body{
    */
   .cell[cell-type=circle]:before{
     border-radius: 100%;
-    background: #d00;
-    width: 90%;
-    height: 90%;
-    top: 5%;
-    left: 5%;
+    background: #FD91CA;
+    width: 50%;
+    height: 50%;
+    top: 25%;
+    left: 25%;
   }
   .cell[cell-type=circle]:after{
     border-radius: 100%;
     background: #fff;
-    width: 40%;
-    height: 40%;
-    top: 30%;
-    left: 30%;
+    width: 26%;
+    height: 26%;
+    top: 37%;
+    left: 37%;
   }
