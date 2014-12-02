@@ -8,13 +8,14 @@ h1{
   font-weight: normal;
 }
 
-#board, #board-info{
+.board-container{
   width: 300px;
   margin: 30px auto;
-  clear: both;
 }
 #board{
   height: 300px;
+  margin: 30px auto;
+  clear: both;
 }
 
   #board ul{
@@ -29,7 +30,7 @@ h1{
   #board .cell:nth-child(5),
   #board .cell:nth-child(7),
   #board .cell:nth-child(8){
-    border-right: 3px solid #ccc;
+    border-right: 2px solid #eee;
   }
 
   #board .cell:nth-child(1),
@@ -38,7 +39,7 @@ h1{
   #board .cell:nth-child(4),
   #board .cell:nth-child(5),
   #board .cell:nth-child(6){
-    border-bottom: 3px solid #ccc;
+    border-bottom: 2px solid #eee;
   }
 
 .cell-label{

@@ -11,7 +11,6 @@ Installation
 ### Prerequisite
 
 * git
-* bower
 
 ### From a mac:
 

@@ -8,24 +8,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- CSS -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,600" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,600" />
   </head>
   <body>
 
-    <!-- The Title -->
-    <h1>An Handy Tic Tac Toe</h1>
 
-    <!-- New game -->
-    <select id="game-type">
-      <option value="human-human">Human vs Human</option>
-      <option value="human-ai">Human vs AI</option>
-      <option value="ai-human">AI vs Human</option>
-    </select>
-    <button id="new-game">New Game</button>
+    <div class="board-container">
 
-    <!-- The board info -->
-    <div id="board-info">
+      <!-- The Title -->
+      <h1>An Handy<br>Tic Tac Toe</h1>
+
+      <!-- The board info -->
       <div class="cell small" cell-type="cross"></div>
       <div class="cell-label" id="player1">
         <span class="name">Human</span>
@@ -36,27 +32,36 @@
         <span class="name">Human</span>
         <span class="status"></span>
       </div>
-    </div>
 
-    <!-- The board -->
-    <div id="board">
-      <ul>
-        <li class="cell" cell-type="" cell-x="1" cell-y="1"></li>
-        <li class="cell" cell-type="" cell-x="2" cell-y="1"></li>
-        <li class="cell" cell-type="" cell-x="3" cell-y="1"></li>
-        <li class="cell" cell-type="" cell-x="1" cell-y="2"></li>
-        <li class="cell" cell-type="" cell-x="2" cell-y="2"></li>
-        <li class="cell" cell-type="" cell-x="3" cell-y="2"></li>
-        <li class="cell" cell-type="" cell-x="1" cell-y="3"></li>
-        <li class="cell" cell-type="" cell-x="2" cell-y="3"></li>
-        <li class="cell" cell-type="" cell-x="3" cell-y="3"></li>
-      </ul>
+      <!-- The board -->
+      <div id="board">
+        <ul>
+          <li class="cell" cell-type="" cell-x="1" cell-y="1"></li>
+          <li class="cell" cell-type="" cell-x="2" cell-y="1"></li>
+          <li class="cell" cell-type="" cell-x="3" cell-y="1"></li>
+          <li class="cell" cell-type="" cell-x="1" cell-y="2"></li>
+          <li class="cell" cell-type="" cell-x="2" cell-y="2"></li>
+          <li class="cell" cell-type="" cell-x="3" cell-y="2"></li>
+          <li class="cell" cell-type="" cell-x="1" cell-y="3"></li>
+          <li class="cell" cell-type="" cell-x="2" cell-y="3"></li>
+          <li class="cell" cell-type="" cell-x="3" cell-y="3"></li>
+        </ul>
+      </div>
+
+      <!-- New game -->
+      <select id="game-type" class="form-control">
+        <option value="human-human">Human vs Human</option>
+        <option value="human-ai">Human vs AI</option>
+        <option value="ai-human">AI vs Human</option>
+        <option value="ai-ai">AI vs AI</option>
+      </select><br>
+      <button id="new-game" class="btn btn-default">New Game</button>
+
     </div>
 
     <!-- Javascript -->
-    <script src="bower_components/jquery/dist/jquery.min.js"></script>
-    <!-- jQuery fallback for rawgit.com -->
-    <script>window.jQuery || document.write('<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"><\/script>')</script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
     <script src="js/board.js"></script>
     <script src="js/ai.js"></script>
     <script src="js/main.js"></script>
