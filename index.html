@@ -22,9 +22,20 @@
     </select>
     <button id="new-game">New Game</button>
 
-    <!-- The winner is.... -->
-    <div id="winner" class="hidden">
-      <div class="cell small" cell-type=""></div> is the winner
+    <div id="board-info">
+      <!-- The winner is.... -->
+      <div>
+        <div class="cell small" cell-type="circle"></div>
+        <div class="cell-label">AI</div>
+        <div class="cell small" cell-type="cross"></div>
+        <div class="cell-label">You</div>
+      </div>
+
+      <!-- The winner is.... -->
+      <div id="winner" class="hidden">
+        <div class="cell small" cell-type=""></div>
+        <div class="cell-label">is the winner</div>
+      </div>
     </div>
 
     <!-- The board -->
