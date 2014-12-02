@@ -7,6 +7,7 @@
    * VARIABLES
    */
   var gameType,
+      humanPlaying,
       player1,
       player2,
       play1,
@@ -27,10 +28,12 @@
    * EVENTS
    */
   $('#board').on('click', '.cell', function(ev){
-    actionLoop({
-      kind:'play',
-      coords:getCoords(ev.target)
-    });
+    if(humanPlaying){
+      actionLoop({
+        kind:'play',
+        coords:getCoords(ev.target)
+      });
+    }
   });
   $('#new-game').on('click', function(ev){
     actionLoop({kind:'new-game'});
@@ -73,10 +76,11 @@
     board.reset();
 
     gameType = $('#game-type').val();
+    humanPlaying = false;
 
     var playerType = gameType.split('-');
-    play1   = playerType[0] == 'human' ? function(){} : ai.play(play);
-    play2   = playerType[1] == 'human' ? function(){} : ai.play(play);
+    play1   = playerType[0] == 'human' ? function(){humanPlaying=true} : ai.play(play);
+    play2   = playerType[1] == 'human' ? function(){humanPlaying=true} : ai.play(play);
     player1 = playerType[0] == 'human' ? 'Human' : 'AI';
     player2 = playerType[1] == 'human' ? 'Human' : 'AI';
 
@@ -120,6 +124,7 @@
   function play(x, y){
     if(board.play(x, y)){
       board.switchPlayer();
+      humanPlaying=false;
       if(board.currentPlayer()==1){
         play1();
       } else {
