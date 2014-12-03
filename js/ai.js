@@ -29,9 +29,9 @@
       }
 
       // 2 - Block
-      board.switchPlayer();
+      board.switchActivePlayer();
       move = getWinningMove();
-      board.switchPlayer();
+      board.switchActivePlayer();
       if(move){
         play(move.x, move.y);
         return;
@@ -45,9 +45,9 @@
       }
 
       // 4 - Blocking an opponent's fork
-      board.switchPlayer();
+      board.switchActivePlayer();
       move = getForkMove();
-      board.switchPlayer();
+      board.switchActivePlayer();
       if(move){
         // option 1
         move = createAThreat(move);

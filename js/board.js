@@ -27,7 +27,7 @@
   module.board = {
     reset:                reset,
 
-    switchPlayer:         switchPlayer,
+    switchActivePlayer:   switchActivePlayer,
 
     play:                 play,
     undo:                 undo,
@@ -46,7 +46,7 @@
     isGameOver:           isGameOver,
     getWinner:            getWinner,
     isWinner1:            isWinner1,
-    // isWinner2:            isWinner2,
+    isWinner2:            isWinner2,
     // isOtherWinner:        isOtherWinner,
     isCurrentWinner:      isCurrentWinner
   };
@@ -74,7 +74,7 @@
       _set(move.x, move.y, CELL_EMPTY);
     }
   }
-  function switchPlayer(cbPlayer1, cbPlayer2){
+  function switchActivePlayer(cbPlayer1, cbPlayer2){
     _currentPlayer = otherPlayer();
     if(isPlayer1()){
       cbPlayer1 && cbPlayer1();
@@ -113,7 +113,7 @@
     return [CELL_EMPTY, ''];
   }
   function isGameOver(){
-    return getWinner()[0] !== CELL_EMPTY;
+    return getWinner()[0] !== CELL_EMPTY || _stack.length == 9;
   }
   function isPlayer1(){
     return currentPlayer() === CELL_PLAYER1;
@@ -130,9 +130,9 @@
   function isWinner1(){
     return getWinner()[0] === CELL_PLAYER1;
   }
-  // function isWinner2(){
-  //   return getWinner()[0] === CELL_PLAYER2;
-  // }
+  function isWinner2(){
+    return getWinner()[0] === CELL_PLAYER2;
+  }
   // function isOtherWinner(){
   //   return getWinner()[0] === otherPlayer();
   // }

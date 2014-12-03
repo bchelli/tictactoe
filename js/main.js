@@ -1,6 +1,6 @@
 
-;(function(){
-
+;(function(module){
+  
   "use strict";
 
   /*
@@ -16,27 +16,24 @@
 
 
 
-
   /*
-   * INIT
+   * START THE GAME
    */
-  actionLoop({kind:'new-game'});
+  $(function(){
+    // attach event listeners
+    $('#board').on('click', '.cell', function(ev){
+      if(allowHumanClick){
+        actionLoop({
+          kind:'play',
+          coords:getCoords(ev.target)
+        });
+      }
+    });
+    $('#new-game').on('click', function(ev){
+      actionLoop({kind:'new-game'});
+    });
 
-
-
-
-  /*
-   * EVENTS
-   */
-  $('#board').on('click', '.cell', function(ev){
-    if(allowHumanClick){
-      actionLoop({
-        kind:'play',
-        coords:getCoords(ev.target)
-      });
-    }
-  });
-  $('#new-game').on('click', function(ev){
+    // start a new game
     actionLoop({kind:'new-game'});
   });
 
@@ -47,76 +44,78 @@
    * PROGRAM LOOP
    */
   function actionLoop(action){
+    var result;
+
+    // execute the action
     action = action || {};
     action.kind = action.kind || 'nope';
     switch(action.kind){
 
       case 'new-game':
-        initBoard();
+        newGame();
         break;
 
       case 'play':
-        play(action.coords.x, action.coords.y);
+        result = play(action.coords.x, action.coords.y);
         break;
 
       default:
         break;
 
     }
-    draw();
+
+    // refresh the board
+    drawTheBoard();
+
+    return result;
   }
 
 
 
 
-  /*
-   * HELPERS
-   */
-  // wait for a click
-  function humanPlays(player){
-    return function(){
-      activePlayer = player;
-    }
-  };
-  // auto-play
-  function AIPlays(){
-    activePlayer = '';
-    allowHumanClick=false;
-    ai.play(function(x,y){
-      var r = play(x,y);
-      allowHumanClick=true;
-      return r;
-    })();
-  };
-  function initBoard(){
 
+  /*
+   * ACTIONS
+   */
+  function newGame(){
+
+    // reset the board
     board.reset();
 
+    // init state
     gameType = $('#game-type').val();
     allowHumanClick = true;
     activePlayer = '';
 
+    // init players
     var playerType = gameType.split('-');
     play1   = playerType[0] == 'human' ? humanPlays('player1') : AIPlays;
     play2   = playerType[1] == 'human' ? humanPlays('player2') : AIPlays;
     player1 = playerType[0] == 'human' ? 'Human' : 'AI';
     player2 = playerType[1] == 'human' ? 'Human' : 'AI';
 
+    // player1 start the game
     play1();
 
   }
 
 
-  function getCoords(cell){
-    var $el = $(cell);
-    var x = parseInt($el.attr('cell-x'), 10)-1;
-    var y = parseInt($el.attr('cell-y'), 10)-1;
-
-    return {x:x,y:y};
+  function play(x, y){
+    if(board.play(x, y)){
+      board.switchActivePlayer(play1, play2);
+      return true;
+    }
+    return false;
   }
 
 
-  function draw(){
+
+
+
+  /*
+   * BOARD RENDERER
+   */
+  function drawTheBoard(){
 
     // the board
     $('#board .cell').each(function(index, el){
@@ -136,7 +135,13 @@
     $('#board').attr('winning-line', '');
     if(board.isGameOver()){
       $('#board').attr('winning-line', board.getWinner()[1]);
-      $('#player'+(board.isWinner1() ? 1 : 2)).addClass('winner').find('.status').html('won');
+      if(board.isWinner1()){
+        $('#player1').addClass('winner').find('.status').html('won');
+      } else if(board.isWinner2()){
+        $('#player2').addClass('winner').find('.status').html('won');
+      } else {
+        $('#board').attr('winning-line', 'tie');
+      }
     } else if(activePlayer){
       $('#'+activePlayer).addClass('active').find('.status').html('thinking...');
     }
@@ -144,13 +149,42 @@
   }
 
 
-  function play(x, y){
-    if(board.play(x, y)){
-      board.switchPlayer(play1, play2);
-      return true;
+
+
+
+
+  /*
+   * HELPERS
+   */
+  // wait for a click
+  function humanPlays(player){
+    return function(){
+      activePlayer = player;
     }
-    return false;
+  };
+
+  // auto-play
+  function AIPlays(){
+    activePlayer = '';
+    allowHumanClick=false;
+    ai.play(function(x,y){
+      var r = actionLoop({
+        kind:'play',
+        coords:{x:x,y:y}
+      });
+      allowHumanClick=true;
+      return r;
+    })();
+  };
+
+  // extract coords from a cell
+  function getCoords(cell){
+    var $el = $(cell);
+    var x = parseInt($el.attr('cell-x'), 10)-1;
+    var y = parseInt($el.attr('cell-y'), 10)-1;
+
+    return {x:x,y:y};
   }
 
-})();
 
+})(window);
