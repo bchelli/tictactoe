@@ -1,7 +1,7 @@
 
-;(function(module){
+;(function(module, $, board, ai){
   
-  "use strict";
+  'use strict';
 
   /*
    * VARIABLES
@@ -29,7 +29,7 @@
         });
       }
     });
-    $('#new-game').on('click', function(ev){
+    $('#new-game').on('click', function(){
       actionLoop({kind:'new-game'});
     });
 
@@ -160,8 +160,8 @@
   function humanPlays(player){
     return function(){
       activePlayer = player;
-    }
-  };
+    };
+  }
 
   // auto-play
   function AIPlays(){
@@ -175,7 +175,7 @@
       allowHumanClick=true;
       return r;
     })();
-  };
+  }
 
   // extract coords from a cell
   function getCoords(cell){
@@ -187,4 +187,4 @@
   }
 
 
-})(window);
+})(window, window.jQuery, window.board, window.ai);

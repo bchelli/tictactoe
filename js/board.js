@@ -1,7 +1,7 @@
 
 ;(function(module){
 
-  "use strict";
+  'use strict';
 
   /*
    * CONSTANTS
@@ -77,9 +77,13 @@
   function switchActivePlayer(cbPlayer1, cbPlayer2){
     _currentPlayer = otherPlayer();
     if(isPlayer1()){
-      cbPlayer1 && cbPlayer1();
+      if(cbPlayer1){
+        cbPlayer1();
+      }
     } else {
-      cbPlayer2 && cbPlayer2();
+      if(cbPlayer2){
+        cbPlayer2();
+      }
     }
   }
   function play(x, y){

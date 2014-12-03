@@ -1,7 +1,7 @@
 
-;(function(module){
+;(function(module, board){
   
-  "use strict";
+  'use strict';
 
   /*
    * Module exported (Singleton)
@@ -76,7 +76,7 @@
       if(play(1, 2)) {return;}
       if(play(2, 1)) {return;}
 
-    }
+    };
 
 
   }
@@ -175,4 +175,4 @@
     return false;
   }
 
-})(window);
+})(window, window.board);
