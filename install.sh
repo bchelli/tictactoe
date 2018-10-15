@@ -10,4 +10,4 @@ cd bchelli-tictactoe
 git clone https://github.com/bchelli/tictactoe.git .
 
 # open in a browser
-open index.html
+open docs/index.html
