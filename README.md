@@ -3,7 +3,7 @@ An Handy Tic Tac Toe
 
 Live demo
 ---------
-[click here](http://rawgit.com/bchelli/tictactoe/master/index.html)
+[click here](http://bchelli.github.io/tictactoe/)
 
 Installation
 ------------
